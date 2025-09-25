@@ -109,6 +109,13 @@ const MapView = forwardRef<MapRef, Props>(({ data, selectedId, onSelect }, ref) 
 
   function ProgressiveMarkers() {
     const bounds = useViewportBounds();
+    const selectedPopupRef = useRef<L.Popup | null>(null);
+
+    useEffect(() => {
+      if (selectedId != null && selectedPopupRef.current && mapRef.current) {
+        selectedPopupRef.current.openOn(mapRef.current);
+      }
+    }, []);
 
     const visibleInViewport = useMemo(() => {
       if (!bounds) return visibleMarkers.slice(0, 800); // initial cap
@@ -171,18 +178,27 @@ const MapView = forwardRef<MapRef, Props>(({ data, selectedId, onSelect }, ref) 
           const sel = visibleInViewport.find(r => r.id === selectedId);
           if (!sel) return null;
           return (
-            <CircleMarker
-              key={`sel-${sel.id}`}
-              center={[sel.latitude, sel.longitude] as L.LatLngExpression}
-              radius={9}
-              pathOptions={{
-                color: '#dc2626',
-                fillColor: '#ef4444',
-                fillOpacity: 1,
-                weight: 3
-              }}
-            >
-              <Popup maxWidth={800} className="!max-w-none">
+            <>
+              <CircleMarker
+                key={`sel-${sel.id}`}
+                center={[sel.latitude, sel.longitude] as L.LatLngExpression}
+                radius={9}
+                pathOptions={{
+                  color: '#dc2626',
+                  fillColor: '#ef4444',
+                  fillOpacity: 1,
+                  weight: 3
+                }}
+              />
+              <Popup
+                key={`popup-${sel.id}`}
+                position={[sel.latitude, sel.longitude] as L.LatLngExpression}
+                maxWidth={800}
+                className="!max-w-none"
+                ref={(p) => {
+                  selectedPopupRef.current = (p as unknown as L.Popup) ?? null;
+                }}
+              >
                 <div className="text-sm min-w-[260px] p-1">
                   <div className="font-semibold mb-2 text-slate-800">{sel.partyName}</div>
                   <div className="text-slate-600 mb-2 font-mono text-xs">{sel.partyPhone}</div>
@@ -190,7 +206,7 @@ const MapView = forwardRef<MapRef, Props>(({ data, selectedId, onSelect }, ref) 
                   <div className="text-xs text-slate-500 font-medium border-t border-slate-200 pt-2">{sel.originalDate} {sel.originalTime}</div>
                 </div>
               </Popup>
-            </CircleMarker>
+            </>
           );
         })()}
       </>
@@ -217,5 +233,4 @@ const MapView = forwardRef<MapRef, Props>(({ data, selectedId, onSelect }, ref) 
 });
 
 export default MapView;
-
 

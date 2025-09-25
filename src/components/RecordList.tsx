@@ -32,7 +32,7 @@ export default function RecordList({ data, selectedId, onSelect }: Props) {
       <div className="space-y-2">
         <div className="relative">
           <input
-            className="w-full px-4 pt-1 pb-2 pr-10 border border-slate-00 rounded-lg bg-white text-slate-900 text-sm placeholder-slate-500 placeholder:text-xs shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all"
+          className="w-full px-4 py-2 pr-10 border-2 border-slate-300 rounded-lg bg-white text-slate-900 text-sm placeholder-slate-500 placeholder:text-xs shadow-sm focus:outline-none focus:ring-0 focus:border-primary-500 hover:border-slate-400 transition-all"
             placeholder="Search messages, names, or numbers."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
@@ -77,5 +77,4 @@ export default function RecordList({ data, selectedId, onSelect }: Props) {
     </div>
   );
 }
-
 
