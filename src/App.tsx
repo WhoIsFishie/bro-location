@@ -77,7 +77,7 @@ function App() {
               />
             </div>
           )}
-        </aside>
+        </aside> 
         <main
           className={
             "p-3 overflow-hidden bg-slate-50 pb-14 md:pb-0 " + // reserve space for bottom nav on mobile
